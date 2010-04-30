@@ -525,35 +525,35 @@ class Kohana_Date {
 	
 	public static function start_of_month($date = null)
 	{
-		$time = Calendar::today_if_null($date);
+		$time = Date::today_if_null($date);
 		return gmmktime(0, 0, 0, date('m', $time), 1, date('Y', $time));
 	}
 	
 	public static function end_of_month($date = null)
 	{
-		$time = Calendar::today_if_null($date);
+		$time = Date::today_if_null($date);
 		return gmmktime(0, 0, 0, date('m', $time), date('t', $time), date('Y', $time));
 	}
 	
 	public static function start_of_week($date = null)
 	{
-		$time = Calendar::today_if_null($date);
-		return gmmktime(0, 0, 0, date('m', $time), (date('d', $time)+Calendar::WEEK_START)-date('w', $time), date('Y', $time));
+		$time = Date::today_if_null($date);
+		return gmmktime(0, 0, 0, date('m', $time), (date('d', $time)+Date::WEEK_START)-date('w', $time), date('Y', $time));
 	}
 	
 	public static function end_of_week($date = null)
 	{
-		$time = Calendar::today_if_null($date);
-		return Calendar::start_of_week($date) + Date::WEEK;
+		$time = Date::today_if_null($date);
+		return Date::start_of_week($date) + Date::WEEK;
 	}
 	
 	public static function week_days($date = null)
 	{
-		$time = Calendar::today_if_null($date);
+		$time = Date::today_if_null($date);
 		$output = array();
 		
-		$startofweek = Calendar::start_of_week($date);
-		$endofweek = Calendar::end_of_week($date);
+		$startofweek = Date::start_of_week($date);
+		$endofweek = Date::end_of_week($date);
 		
 		$day = $startofweek;
 		
