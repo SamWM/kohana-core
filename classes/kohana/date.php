@@ -17,6 +17,9 @@ class Kohana_Date {
 	const DAY    = 86400;
 	const HOUR   = 3600;
 	const MINUTE = 60;
+	
+	// which day does the week start on (0 - 6)
+	const WEEK_START = 1;
 
 	/**
 	 * Returns the offset (in seconds) between two time zones. When you display
@@ -513,6 +516,53 @@ class Kohana_Date {
 		$year = ($timestamp >> 25) & 0x7f;
 
 		return mktime($hrs, $min, $sec, $mon, $day, $year + 1980);
+	}
+	
+	public static function today_if_null($date = null)
+	{
+		return is_string($date) ? strtotime($date) : (is_int($date) ? $date : time());
+	}
+	
+	public static function start_of_month($date = null)
+	{
+		$time = Calendar::today_if_null($date);
+		return gmmktime(0, 0, 0, date('m', $time), 1, date('Y', $time));
+	}
+	
+	public static function end_of_month($date = null)
+	{
+		$time = Calendar::today_if_null($date);
+		return gmmktime(0, 0, 0, date('m', $time), date('t', $time), date('Y', $time));
+	}
+	
+	public static function start_of_week($date = null)
+	{
+		$time = Calendar::today_if_null($date);
+		return gmmktime(0, 0, 0, date('m', $time), (date('d', $time)+Calendar::WEEK_START)-date('w', $time), date('Y', $time));
+	}
+	
+	public static function end_of_week($date = null)
+	{
+		$time = Calendar::today_if_null($date);
+		return Calendar::start_of_week($date) + Date::WEEK;
+	}
+	
+	public static function week_days($date = null)
+	{
+		$time = Calendar::today_if_null($date);
+		$output = array();
+		
+		$startofweek = Calendar::start_of_week($date);
+		$endofweek = Calendar::end_of_week($date);
+		
+		$day = $startofweek;
+		
+		while( $day < $endofweek ) {
+			array_push($output, date("D", $day));
+			$day = $day + Date::DAY;
+		}
+		
+		return $output;
 	}
 
 	final private function __construct()
