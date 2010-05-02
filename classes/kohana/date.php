@@ -538,13 +538,15 @@ class Kohana_Date {
 	public static function start_of_week($date = null)
 	{
 		$time = Date::today_if_null($date);
-		return gmmktime(0, 0, 0, date('m', $time), (date('d', $time)+Date::WEEK_START)-date('w', $time), date('Y', $time));
+		$start = gmmktime(0, 0, 0, date('m', $time), (date('d', $time)+Date::WEEK_START)-date('w', $time), date('Y', $time));
+		if($start > $time) $start -= Date::WEEK;
+		return $start;
 	}
 	
 	public static function end_of_week($date = null)
 	{
 		$time = Date::today_if_null($date);
-		return Date::start_of_week($date) + Date::WEEK;
+		return Date::start_of_week($date) + Date::WEEK - 1;
 	}
 	
 	public static function week_days($date = null)
